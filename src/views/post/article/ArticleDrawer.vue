@@ -4,7 +4,7 @@
     @register="registerDrawer"
     showFooter
     :title="getTitle"
-    width="500px"
+    width="50%"
     @ok="handleSubmit"
   >
     <BasicForm @register="registerForm">
@@ -27,8 +27,7 @@
   import { formSchema } from './article.data';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicTree, TreeItem } from '/@/components/Tree';
-  import { getPostById } from '/@/api/post/article';
-  import { getMenuList } from '/@/api/system/system';
+  import { getPostById, postSave, findTagList } from '/@/api/post/article';
 
   export default defineComponent({
     name: 'ArticleDrawer',
@@ -36,9 +35,10 @@
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const isUpdate = ref(true);
+      let id;
       const treeData = ref<TreeItem[]>([]);
 
-      const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
+      const [registerForm, { resetFields, setFieldsValue, updateSchema, validate }] = useForm({
         labelWidth: 90,
         schemas: formSchema,
         showActionButtonGroup: false,
@@ -50,13 +50,20 @@
         isUpdate.value = !!data?.isUpdate;
 
         if (unref(isUpdate)) {
-          const postInfo = await getPostById(data.record.id);
+          id = data.record.id;
+          console.log(id);
+          const postInfo = await getPostById(id);
           console.log(postInfo);
+
           setFieldsValue({
             ...postInfo,
           });
         }
-        treeData.value = ((await getMenuList()) as any) as TreeItem[];
+        const tagList = await findTagList();
+        updateSchema({
+          field: 'tagId',
+          componentProps: { tagList },
+        });
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增文章' : '编辑文章'));
@@ -65,7 +72,11 @@
         try {
           const values = await validate();
           setDrawerProps({ confirmLoading: true });
+          if (id) {
+            values.id = id;
+          }
           // TODO custom api
+          await postSave(values);
           console.log(values);
           closeDrawer();
           emit('success');

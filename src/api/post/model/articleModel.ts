@@ -1,6 +1,10 @@
 export interface ArticleParams {
   title: string;
-  sum: string;
+  summary: string;
+  status: number;
+  typeId: number;
+  tagId: number;
+  content: string;
 }
 
 export interface ArticleListItem {

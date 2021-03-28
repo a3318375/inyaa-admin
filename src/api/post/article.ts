@@ -36,6 +36,9 @@ export const findTagList = (params: ArticleParams) =>
 export const saveType = (params: ArticleParams) =>
   defHttp.post<String>({ url: Api.TypeSave, params });
 
+export const postSave = (params: ArticleParams) =>
+  defHttp.post<String>({ url: Api.PostSave, params });
+
 export const saveTag = (params: ArticleParams) =>
   defHttp.post<String>({ url: Api.TagSave, params });
 

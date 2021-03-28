@@ -1,5 +1,7 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
+import { findTagList, findTypeList } from '/@/api/post/article';
+import { MarkDown } from '/@/components/Markdown';
 import { h } from 'vue';
 import { Tag } from 'ant-design-vue';
 export const columns: BasicColumn[] = [
@@ -19,7 +21,7 @@ export const columns: BasicColumn[] = [
     width: 80,
     customRender: ({ record }) => {
       const status = record.status;
-      const enable = ~~status === 0;
+      const enable = ~~status === 2;
       const color = enable ? 'green' : 'red';
       const text = enable ? '发布' : '草稿';
       return h(Tag, { color: color }, () => text);
@@ -55,38 +57,63 @@ export const searchFormSchema: FormSchema[] = [
 
 export const formSchema: FormSchema[] = [
   {
-    field: 'roleName',
-    label: '角色名称',
+    field: 'title',
+    label: '标题',
     required: true,
     component: 'Input',
   },
   {
-    field: 'roleValue',
-    label: '角色值',
-    required: true,
-    component: 'Input',
+    field: 'summary',
+    label: '摘要',
+    component: 'InputTextArea',
+  },
+  {
+    field: 'typeId',
+    label: '分类id',
+    component: 'ApiSelect',
+
+    componentProps: {
+      api: findTypeList,
+      labelField: 'name',
+      valueField: 'id',
+    },
+  },
+  {
+    field: 'tagId',
+    label: '标签id',
+    component: 'ApiSelect',
+
+    componentProps: {
+      api: findTagList,
+      labelField: 'name',
+      valueField: 'id',
+    },
   },
   {
     field: 'status',
     label: '状态',
     component: 'RadioButtonGroup',
-    defaultValue: '0',
+    defaultValue: 2,
     componentProps: {
       options: [
-        { label: '启用', value: '0' },
-        { label: '停用', value: '1' },
+        { label: '草稿', value: 1 },
+        { label: '发布', value: 2 },
       ],
     },
   },
   {
-    label: '备注',
-    field: 'remark',
-    component: 'InputTextArea',
-  },
-  {
-    label: ' ',
-    field: 'menu',
-    slot: 'menu',
+    label: '文章',
+    field: 'context',
     component: 'Input',
+    defaultValue: 'defaultValue',
+    rules: [{ required: true, trigger: 'blur' }],
+    render: ({ model, field }) => {
+      return h(MarkDown, {
+        value: model[field],
+        onChange: (value: string) => {
+          model[field] = value;
+        },
+      });
+    },
   },
 ];

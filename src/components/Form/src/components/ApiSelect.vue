@@ -26,7 +26,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { propTypes } from '/@/utils/propTypes';
 
-  type OptionsItem = { label: string; value: string; disabled?: boolean };
+  type OptionsItem = { label: string; value: number; disabled?: boolean };
 
   export default defineComponent({
     name: 'ApiSelect',
@@ -36,7 +36,7 @@
     },
     inheritAttrs: false,
     props: {
-      value: propTypes.string,
+      value: propTypes.number,
       numberToString: propTypes.bool,
       api: {
         type: Function as PropType<(arg?: Recordable) => Promise<OptionsItem[]>>,
