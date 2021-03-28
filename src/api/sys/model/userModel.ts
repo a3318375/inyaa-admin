@@ -10,7 +10,7 @@ export interface LoginParams {
  * @description: Get user information
  */
 export interface GetUserInfoByUserIdParams {
-  userId: string | number;
+  username: string;
 }
 
 export interface RoleInfo {
@@ -22,8 +22,11 @@ export interface RoleInfo {
  * @description: Login interface return value
  */
 export interface LoginResultModel {
-  userId: string | number;
-  token: string;
+  username: string;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
   role: RoleInfo;
 }
 

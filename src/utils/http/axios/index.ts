@@ -42,38 +42,38 @@ const transform: AxiosTransform = {
     }
     // 错误的时候返回
 
-    const { data } = res;
-    if (!data) {
+    const resp = res.data;
+    if (!resp) {
       // return '[HTTP] Request has no return value';
       return errorResult;
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-    const { code, result, message } = data;
+    const { code, data, errorMessage } = resp;
 
     // 这里逻辑可以根据项目进行修改
-    const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
+    const hasSuccess = resp && Reflect.has(resp, 'code') && code === ResultEnum.SUCCESS;
     if (!hasSuccess) {
-      if (message) {
+      if (errorMessage) {
         // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
         if (options.errorMessageMode === 'modal') {
-          createErrorModal({ title: t('sys.api.errorTip'), content: message });
+          createErrorModal({ title: t('sys.api.errorTip'), content: errorMessage });
         } else if (options.errorMessageMode === 'message') {
-          createMessage.error(message);
+          createMessage.error(errorMessage);
         }
       }
-      Promise.reject(new Error(message));
+      Promise.reject(new Error(errorMessage));
       return errorResult;
     }
 
     // 接口请求成功，直接返回结果
     if (code === ResultEnum.SUCCESS) {
-      return result;
+      return data;
     }
     // 接口请求错误，统一提示错误信息
     if (code === ResultEnum.ERROR) {
-      if (message) {
-        createMessage.error(data.message);
-        Promise.reject(new Error(message));
+      if (errorMessage) {
+        createMessage.error(data.errorMessage);
+        Promise.reject(new Error(errorMessage));
       } else {
         const msg = t('sys.api.errorMessage');
         createMessage.error(msg);
