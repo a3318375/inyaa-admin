@@ -4,7 +4,7 @@
     @register="registerDrawer"
     showFooter
     :title="getTitle"
-    width="500px"
+    width="50%"
     @ok="handleSubmit"
   >
     <BasicForm @register="registerForm">
@@ -12,10 +12,20 @@
         <BasicTree
           v-model:value="model[field]"
           :treeData="treeData"
-          :replaceFields="{ title: 'menuName', key: 'id' }"
+          :replaceFields="{ title: 'name', key: 'id' }"
           checkable
           toolbar
           title="菜单分配"
+        />
+      </template>
+      <template #permission="{ model, field }">
+        <BasicTree
+          v-model:value="model[field]"
+          :treeData="persionTree"
+          :replaceFields="{ title: 'name', key: 'id' }"
+          checkable
+          toolbar
+          title="权限分配"
         />
       </template>
     </BasicForm>
@@ -28,7 +38,7 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicTree, TreeItem } from '/@/components/Tree';
 
-  import { getMenuList } from '/@/api/system/system';
+  import { getMenuList, findPermissionList } from '/@/api/system/system';
 
   export default defineComponent({
     name: 'RoleDrawer',
@@ -37,6 +47,7 @@
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const treeData = ref<TreeItem[]>([]);
+      const persionTree = ref<TreeItem[]>([]);
 
       const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
         labelWidth: 90,
@@ -55,6 +66,7 @@
           });
         }
         treeData.value = ((await getMenuList()) as any) as TreeItem[];
+        persionTree.value = ((await findPermissionList()) as any) as TreeItem[];
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增角色' : '编辑角色'));
@@ -78,6 +90,7 @@
         getTitle,
         handleSubmit,
         treeData,
+        persionTree,
       };
     },
   });

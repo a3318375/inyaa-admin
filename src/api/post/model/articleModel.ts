@@ -3,6 +3,7 @@ export interface ArticleParams {
   summary: string;
   status: number;
   typeId: number;
+  cover: string;
   tagId: number;
   content: string;
 }

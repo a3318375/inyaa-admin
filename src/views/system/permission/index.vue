@@ -2,7 +2,7 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate"> 新增部门 </a-button>
+        <a-button type="primary" @click="handleCreate"> 新增权限 </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
@@ -30,21 +30,21 @@
   import { defineComponent } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { deleteDept, getDeptList } from '/@/api/system/system';
+  import { deletePermission, findPermissionList } from '/@/api/system/system';
 
   import { useModal } from '/@/components/Modal';
-  import DeptModal from './DeptModal.vue';
+  import DeptModal from './PermissionModal.vue';
 
-  import { columns, searchFormSchema } from './dept.data';
+  import { columns, searchFormSchema } from './permission.data';
 
   export default defineComponent({
-    name: 'DeptManagement',
+    name: 'PermissionManagement',
     components: { BasicTable, DeptModal, TableAction },
     setup() {
       const [registerModal, { openModal }] = useModal();
       const [registerTable, { reload }] = useTable({
-        title: '部门列表',
-        api: getDeptList,
+        title: '权限列表',
+        api: findPermissionList,
         columns,
         formConfig: {
           labelWidth: 120,
@@ -85,7 +85,7 @@
       }
 
       function handleDelete(record: Recordable) {
-        deleteDept(record.id);
+        deletePermission(record.id);
       }
 
       function handleSuccess() {

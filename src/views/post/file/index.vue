@@ -1,12 +1,13 @@
 <template>
   <PageWrapper :class="prefixCls" title="卡片列表">
     <template #headerContent>
-      基于Vue Next, TypeScript, Ant Design Vue实现的一套完整的企业级后台管理系统。
-      <div :class="`${prefixCls}__link`">
-        <a><Icon icon="bx:bx-paper-plane" color="#1890ff" /><span>开始</span></a>
-        <a><Icon icon="carbon:warning" color="#1890ff" /><span>简介</span></a>
-        <a><Icon icon="ion:document-text-outline" color="#1890ff" /><span>文档</span></a>
-      </div>
+      <BasicUpload
+        :maxSize="20"
+        :maxNumber="10"
+        @change="handleChange"
+        :api="uploadApi"
+        class="my-5"
+      />
     </template>
 
     <div :class="`${prefixCls}__content`">
@@ -18,7 +19,7 @@
                 <a-card :hoverable="true" :class="`${prefixCls}__card`">
                   <div :class="`${prefixCls}__card-title`">
                     <Icon class="icon" v-if="item.icon" :icon="item.icon" :color="item.color" />
-                    {{ item.title }}
+                    {{ item.url }}
                   </div>
                   <div :class="`${prefixCls}__card-detail`">
                     基于Vue Next, TypeScript, Ant Design Vue实现的一套完整的企业级后台管理系统
@@ -34,25 +35,57 @@
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
+  import { BasicUpload } from '/@/components/Upload';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { FormSchema, useForm } from '/@/components/Form/index';
   import Icon from '/@/components/Icon/index';
-  import { cardList } from './data';
   import { PageWrapper } from '/@/components/Page';
   import { Card, Row, Col, List } from 'ant-design-vue';
+  import { uploadApi, findImgList } from '/@/api/sys/upload';
 
+  const schemas: FormSchema[] = [
+    {
+      field: 'file',
+      component: 'Upload',
+      label: '字段1',
+      colProps: {
+        span: 8,
+      },
+      rules: [{ required: true, message: '请选择上传文件' }],
+      componentProps: {
+        api: uploadApi,
+      },
+    },
+  ];
   export default defineComponent({
+    name: 'FileManagement',
     components: {
+      BasicUpload,
       Icon,
       PageWrapper,
       [Card.name]: Card,
       [List.name]: List,
-      [List.Item.name]: List.Item,
+      [List.Item.url]: List.Item,
       [Row.name]: Row,
       [Col.name]: Col,
     },
     setup() {
+      const { createMessage } = useMessage();
+      const [register] = useForm({
+        labelWidth: 120,
+        schemas,
+        actionColOptions: {
+          span: 16,
+        },
+      });
       return {
         prefixCls: 'list-card',
-        list: cardList,
+        list: findImgList,
+        handleChange: (list: string[]) => {
+          createMessage.info(`已上传文件${JSON.stringify(list)}`);
+        },
+        uploadApi,
+        register,
       };
     },
   });

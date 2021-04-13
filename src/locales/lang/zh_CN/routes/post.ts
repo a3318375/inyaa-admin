@@ -6,4 +6,6 @@ export default {
   type: '分类管理',
 
   tag: '标签管理',
+
+  file: '图片管理',
 };

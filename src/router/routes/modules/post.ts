@@ -40,6 +40,15 @@ const system: AppRouteModule = {
       },
       component: () => import('/@/views/post/tag/index.vue'),
     },
+    {
+      path: 'file',
+      name: 'FileManagement',
+      meta: {
+        title: t('routes.post.file'),
+        ignoreKeepAlive: true,
+      },
+      component: () => import('/@/views/post/file/index.vue'),
+    },
   ],
 };
 

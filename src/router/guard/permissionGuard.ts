@@ -3,7 +3,6 @@ import type { Router, RouteRecordRaw } from 'vue-router';
 import { permissionStore } from '/@/store/modules/permission';
 
 import { PageEnum } from '/@/enums/pageEnum';
-import { userStore } from '/@/store/modules/user';
 
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
@@ -25,32 +24,6 @@ export function createPermissionGuard(router: Router) {
       return;
     }
 
-    const token = userStore.getTokenState;
-
-    // token does not exist
-    if (!token) {
-      // You can access without permission. You need to set the routing meta.ignoreAuth to true
-      if (
-        to.meta.ignoreAuth
-        // || to.name === FULL_PAGE_NOT_FOUND_ROUTE.name
-      ) {
-        next();
-        return;
-      }
-      // redirect login page
-      const redirectData: { path: string; replace: boolean; query?: Indexable<string> } = {
-        path: LOGIN_PATH,
-        replace: true,
-      };
-      if (to.path) {
-        redirectData.query = {
-          ...redirectData.query,
-          redirect: to.path,
-        };
-      }
-      next(redirectData);
-      return;
-    }
     if (permissionStore.getIsDynamicAddedRouteState) {
       next();
       return;

@@ -1,6 +1,7 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 import { findTagList, findTypeList } from '/@/api/post/article';
+import { uploadCover } from '/@/api/sys/upload';
 import { MarkDown } from '/@/components/Markdown';
 import { h } from 'vue';
 import { Tag } from 'ant-design-vue';
@@ -99,6 +100,16 @@ export const formSchema: FormSchema[] = [
         { label: '草稿', value: 1 },
         { label: '发布', value: 2 },
       ],
+    },
+  },
+  {
+    field: 'cover',
+    label: '封面',
+    component: 'Upload',
+    rules: [{ required: true, message: '请选择上传文件' }],
+    componentProps: {
+      api: uploadCover,
+      maxNumber: 1,
     },
   },
   {

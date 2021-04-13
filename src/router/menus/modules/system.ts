@@ -19,6 +19,10 @@ const menu: MenuModule = {
         name: t('routes.demo.system.role'),
       },
       {
+        path: 'permission',
+        name: t('routes.demo.system.permission'),
+      },
+      {
         path: 'menu',
         name: t('routes.demo.system.menu'),
       },

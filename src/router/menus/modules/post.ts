@@ -22,6 +22,10 @@ const menu: MenuModule = {
         path: 'tag',
         name: t('routes.post.tag'),
       },
+      {
+        path: 'file',
+        name: t('routes.post.file'),
+      },
     ],
   },
 };

@@ -5,21 +5,25 @@ import {
   RoleParams,
   DeptParams,
   RolePageParams,
-  MenuListGetResultModel,
+  RoleListItem,
+  MenuListItem,
   DeptListGetResultModel,
   AccountListGetResultModel,
-  RolePageListGetResultModel,
   RoleListGetResultModel,
 } from './model/systemModel';
 import { defHttp } from '/@/utils/http/axios';
 
 enum Api {
-  AccountList = '/system/getAccountList',
+  AccountList = '/user/list',
   DeptSave = '/dept/save',
-  DeleteSave = '/dept/delete',
+  DeptDelete = '/dept/delete',
   DeptList = '/dept/findDeptTree',
-  MenuList = '/system/getMenuList',
-  RolePageList = '/system/getRoleListByPage',
+  PermissionList = '/permission/list',
+  PermissionSave = '/permission/save',
+  PermissionDel = '/permission/delete',
+  MenuList = '/menu/admin/list',
+  MenuSave = '/menu/save',
+  RoleList = '/role/list',
   GetAllRoleList = '/system/getAllRoleList',
 }
 
@@ -30,16 +34,28 @@ export const saveDept = (params?: DeptParams) =>
   defHttp.post<String[]>({ url: Api.DeptSave, params });
 
 export const deleteDept = (id?: string) =>
-  defHttp.post<String[]>({ url: Api.DeleteSave, params: { id: id } });
+  defHttp.post<String[]>({ url: Api.DeptDelete, params: { id: id } });
 
 export const getDeptList = (params?: DeptListItem) =>
   defHttp.get<DeptListGetResultModel>({ url: Api.DeptList, params });
 
-export const getMenuList = (params?: MenuParams) =>
-  defHttp.get<MenuListGetResultModel>({ url: Api.MenuList, params });
+export const savePermission = (params?: DeptParams) =>
+  defHttp.post<String[]>({ url: Api.PermissionSave, params });
 
-export const getRoleListByPage = (params?: RolePageParams) =>
-  defHttp.get<RolePageListGetResultModel>({ url: Api.RolePageList, params });
+export const deletePermission = (id?: string) =>
+  defHttp.post<String[]>({ url: Api.PermissionDel, params: { id: id } });
+
+export const findPermissionList = (params?: DeptListItem) =>
+  defHttp.get<DeptListGetResultModel>({ url: Api.PermissionList, params });
+
+export const getMenuList = (params?: MenuParams) =>
+  defHttp.get<MenuListItem>({ url: Api.MenuList, params });
+
+export const saveMenu = (params?: MenuParams) =>
+  defHttp.post<MenuListItem>({ url: Api.MenuSave, params });
+
+export const findRoleList = (params?: RolePageParams) =>
+  defHttp.get<RoleListItem>({ url: Api.RoleList, params });
 
 export const getAllRoleList = (params?: RoleParams) =>
   defHttp.get<RoleListGetResultModel>({ url: Api.GetAllRoleList, params });

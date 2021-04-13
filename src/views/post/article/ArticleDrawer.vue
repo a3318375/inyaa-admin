@@ -70,7 +70,8 @@
 
       async function handleSubmit() {
         try {
-          const values = await validate();
+          let values = await validate();
+          values.cover = values.cover[0];
           setDrawerProps({ confirmLoading: true });
           if (id) {
             values.id = id;

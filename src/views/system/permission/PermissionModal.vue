@@ -7,18 +7,18 @@
   import { defineComponent, ref, computed, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { formSchema } from './dept.data';
+  import { formSchema } from './permission.data';
 
-  import { saveDept, getDeptList } from '/@/api/system/system';
+  import { savePermission } from '/@/api/system/system';
   export default defineComponent({
-    name: 'DeptModal',
+    name: 'PermissionModal',
     components: { BasicModal, BasicForm },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const isUpdate = ref(true);
       let id;
 
-      const [registerForm, { resetFields, setFieldsValue, updateSchema, validate }] = useForm({
+      const [registerForm, { resetFields, setFieldsValue, validate }] = useForm({
         labelWidth: 100,
         schemas: formSchema,
         showActionButtonGroup: false,
@@ -35,14 +35,9 @@
             ...data.record,
           });
         }
-        const treeData = await getDeptList();
-        updateSchema({
-          field: 'parentId',
-          componentProps: { treeData },
-        });
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增部门' : '编辑部门'));
+      const getTitle = computed(() => (!unref(isUpdate) ? '新增权限' : '编辑权限'));
 
       async function handleSubmit() {
         try {
@@ -53,7 +48,7 @@
             values.id = id;
           }
           // TODO custom api
-          await saveDept(values);
+          await savePermission(values);
           closeModal();
           emit('success');
         } finally {

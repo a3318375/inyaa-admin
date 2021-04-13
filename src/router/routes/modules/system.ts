@@ -31,7 +31,15 @@ const system: AppRouteModule = {
       },
       component: () => import('/@/views/system/role/index.vue'),
     },
-
+    {
+      path: 'permission',
+      name: 'PermissionManagement',
+      meta: {
+        title: t('routes.demo.system.permission'),
+        ignoreKeepAlive: true,
+      },
+      component: () => import('/@/views/system/permission/index.vue'),
+    },
     {
       path: 'menu',
       name: 'MenuManagement',

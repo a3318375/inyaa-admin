@@ -2,6 +2,7 @@ import { BasicPageParams, BasicFetchResult } from '/@/api/model/baseModel';
 
 export type AccountParams = BasicPageParams & {
   account?: string;
+  password?: string;
   nickname?: string;
 };
 
@@ -13,15 +14,23 @@ export type RoleParams = {
 export type RolePageParams = BasicPageParams & RoleParams;
 
 export type MenuParams = {
-  menuName?: string;
-  status?: string;
+  id?: number;
+  pid?: number;
+  name?: string;
+  enable?: number;
+  permission?: string;
+  component?: string;
+  path?: string;
+  icon?: string;
+  type?: number;
+  sort?: number;
 };
 
 export interface AccountListItem {
   id: string;
-  account: string;
+  username: string;
   email: string;
-  nickname: string;
+  name: string;
   role: number;
   createTime: string;
   remark: string;
@@ -46,7 +55,9 @@ export interface DeptListItem {
 
 export interface MenuListItem {
   id: string;
-  orderNo: string;
+  type: number;
+  sort: number;
+  name: number;
   createTime: string;
   status: number;
   icon: string;
@@ -57,9 +68,8 @@ export interface MenuListItem {
 export interface RoleListItem {
   id: string;
   roleName: string;
-  roleValue: string;
-  status: number;
-  orderNo: string;
+  roleKey: string;
+  remark: string;
   createTime: string;
 }
 
